@@ -23,7 +23,7 @@ body {
 }
 
 .header-content {
-  max-width: 1400px;
+  max-width: 100vh;
   margin: 0 auto;
   padding: 0 2rem;
   display: flex;
