@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>IVECO GPS - Rotas Entre Cidades</title>
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="rotas-cidades.css">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+  <header>
+    <div class="header-content">
+      <div class="logo">
+        <h1>IVECO GPS - Rotas Entre Cidades</h1>
+        <p>Sistema de Otimização de Rotas e Economia Ambiental</p>
+      </div>
+      <div class="status-bar">
+        <span class="status-item">🟢 Sistema Online</span>
+        <span class="status-item">🚛 GPS Ativo</span>
+        <span class="status-item">⏰ <span id="currentTime"></span></span>
+      </div>
+      <div class="header-actions">
+        <a href="index.html" class="btn-voltar">🏠 Voltar ao Sistema Principal</a>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <!-- SELEÇÃO DE ROTA -->
+    <section class="selecao-rota">
+      <h2>🗺️ Seleção de Rota</h2>
+      <div class="rota-config">
+        <div class="origem-destino">
+          <div class="cidade-input">
+            <label>🏭 Origem (IVECO):</label>
+            <select id="cidadeOrigem">
+              <option value="sao-paulo">São Paulo - SP</option>
+              <option value="rio-janeiro">Rio de Janeiro - RJ</option>
+              <option value="belo-horizonte">Belo Horizonte - MG</option>
+              <option value="curitiba">Curitiba - PR</option>
+              <option value="porto-alegre">Porto Alegre - RS</option>
+            </select>
+          </div>
+          <div class="cidade-input">
+            <label>🏢 Destino:</label>
+            <select id="cidadeDestino">
+              <option value="brasilia">Brasília - DF</option>
+              <option value="salvador">Salvador - BA</option>
+              <option value="fortaleza">Fortaleza - CE</option>
+              <option value="recife">Recife - PE</option>
+              <option value="manaus">Manaus - AM</option>
+            </select>
+          </div>
+        </div>
+        <div class="carga-config">
+          <label>📦 Capacidade do Caminhão:</label>
+          <input type="range" id="capacidadeCaminhao" min="0" max="100" value="75">
+          <span id="capacidadeValue">75%</span>
+        </div>
+        <button onclick="calcularRotas()" class="btn-calcular">🚀 Calcular Rotas</button>
+      </div>
+    </section>
+
+    <!-- MAPA E ROTAS -->
+    <section class="mapa-rotas">
+      <h2>🗺️ Mapa de Rotas</h2>
+      <div class="mapa-container">
+        <div class="mapa-cidades" id="mapaCidades">
+          <!-- Cidades serão criadas dinamicamente -->
+        </div>
+        <div class="rotas-linhas" id="rotasLinhas">
+          <!-- Linhas das rotas serão criadas dinamicamente -->
+        </div>
+        <div class="gps-indicador" id="gpsIndicador">
+          <div class="gps-dot"></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- COMPARAÇÃO DE ROTAS -->
+    <section class="comparacao-rotas">
+      <h2>📊 Comparação de Rotas</h2>
+      <div class="rotas-grid" id="rotasGrid">
+        <!-- Rotas serão criadas dinamicamente -->
+      </div>
+    </section>
+
+    <!-- SIMULAÇÃO GPS -->
+    <section class="simulacao-gps">
+      <h2>🎮 Simulação GPS</h2>
+      <div class="gps-controls">
+        <button onclick="iniciarSimulacao()" class="btn-simular">▶️ Iniciar Viagem</button>
+        <button onclick="pausarSimulacao()" class="btn-pausar">⏸️ Pausar</button>
+        <button onclick="resetarSimulacao()" class="btn-resetar">🔄 Resetar</button>
+      </div>
+      <div class="gps-info">
+        <div class="info-item">
+          <span class="label">📍 Posição:</span>
+          <span id="posicaoAtual">Aguardando...</span>
+        </div>
+        <div class="info-item">
+          <span class="label">🚗 Velocidade:</span>
+          <span id="velocidadeAtual">0 km/h</span>
+        </div>
+        <div class="info-item">
+          <span class="label">⏱️ Tempo Restante:</span>
+          <span id="tempoRestante">--:--</span>
+        </div>
+        <div class="info-item">
+          <span class="label">🛣️ Distância Restante:</span>
+          <span id="distanciaRestante">0 km</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- ECONOMIA AMBIENTAL -->
+    <section class="economia-ambiental">
+      <h2>🌱 Economia Ambiental</h2>
+      <div class="economia-grid">
+        <div class="economia-card">
+          <h3>⛽ Economia de Combustível</h3>
+          <div class="economia-valor" id="economiaCombustivel">R$ 0,00</div>
+          <div class="economia-desc">Economia na rota otimizada</div>
+        </div>
+        <div class="economia-card">
+          <h3>🌿 Redução de CO₂</h3>
+          <div class="economia-valor" id="reducaoCO2">0 kg</div>
+          <div class="economia-desc">Menos poluição na atmosfera</div>
+        </div>
+        <div class="economia-card">
+          <h3>⏰ Economia de Tempo</h3>
+          <div class="economia-valor" id="economiaTempo">0h 0min</div>
+          <div class="economia-desc">Tempo economizado na viagem</div>
+        </div>
+        <div class="economia-card">
+          <h3>💰 Economia Total</h3>
+          <div class="economia-valor" id="economiaTotal">R$ 0,00</div>
+          <div class="economia-desc">Valor total economizado</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- PROJEÇÕES FUTURAS -->
+    <section class="projecoes-futuras">
+      <h2>🔮 Projeções Futuras</h2>
+      <div class="projecoes-tabs">
+        <button class="tab-btn ativo" onclick="mostrarProjecao('10anos')">10 Anos</button>
+        <button class="tab-btn" onclick="mostrarProjecao('50anos')">50 Anos</button>
+        <button class="tab-btn" onclick="mostrarProjecao('100anos')">100 Anos</button>
+      </div>
+      <div class="projecoes-content" id="projecoesContent">
+        <!-- Conteúdo será preenchido dinamicamente -->
+      </div>
+    </section>
+
+    <!-- GRÁFICOS DE ECONOMIA -->
+    <section class="graficos-economia">
+      <h2>📈 Gráficos de Economia</h2>
+      <div class="graficos-grid">
+        <div class="grafico-container">
+          <h3>Economia de Combustível ao Longo do Tempo</h3>
+          <canvas id="graficoCombustivel"></canvas>
+        </div>
+        <div class="grafico-container">
+          <h3>Redução de CO₂ Acumulada</h3>
+          <canvas id="graficoCO2"></canvas>
+        </div>
+        <div class="grafico-container">
+          <h3>Economia Financeira Acumulada</h3>
+          <canvas id="graficoFinanceiro"></canvas>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <script src="rotas-cidades.js"></script>
+</body>
+</html>
+

@@ -1,0 +1,709 @@
+/* CSS específico para Rotas Entre Cidades */
+
+/* Botão de voltar */
+.header-actions {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.btn-voltar {
+  background: linear-gradient(135deg, #3498db, #2980b9);
+  color: white;
+  padding: 10px 20px;
+  border-radius: 8px;
+  text-decoration: none;
+  font-weight: 600;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 15px rgba(52, 152, 219, 0.3);
+}
+
+.btn-voltar:hover {
+  background: linear-gradient(135deg, #2980b9, #1f5f8b);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(52, 152, 219, 0.4);
+}
+
+/* Seleção de Rota */
+.selecao-rota {
+  background: white;
+  border-radius: 15px;
+  padding: 2rem;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+  margin-bottom: 2rem;
+}
+
+.rota-config {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.origem-destino {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 2rem;
+}
+
+.cidade-input {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.cidade-input label {
+  font-weight: 600;
+  color: #1e3c72;
+  font-size: 1rem;
+}
+
+.cidade-input select {
+  padding: 1rem;
+  border: 2px solid #e0e0e0;
+  border-radius: 10px;
+  font-size: 1rem;
+  background: white;
+  transition: border-color 0.3s ease;
+}
+
+.cidade-input select:focus {
+  outline: none;
+  border-color: #1e3c72;
+}
+
+.carga-config {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 1rem;
+  background: #f8f9fa;
+  border-radius: 10px;
+}
+
+.carga-config label {
+  font-weight: 600;
+  color: #1e3c72;
+  min-width: 200px;
+}
+
+.carga-config input[type="range"] {
+  flex: 1;
+  height: 8px;
+  border-radius: 5px;
+  background: #e0e0e0;
+  outline: none;
+  -webkit-appearance: none;
+}
+
+.carga-config input[type="range"]::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background: #1e3c72;
+  cursor: pointer;
+}
+
+.carga-config input[type="range"]::-moz-range-thumb {
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background: #1e3c72;
+  cursor: pointer;
+  border: none;
+}
+
+#capacidadeValue {
+  font-weight: bold;
+  color: #1e3c72;
+  min-width: 50px;
+  text-align: center;
+}
+
+.btn-calcular {
+  background: linear-gradient(135deg, #667eea, #764ba2);
+  color: white;
+  border: none;
+  padding: 1rem 2rem;
+  border-radius: 10px;
+  font-size: 1.1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  align-self: center;
+}
+
+.btn-calcular:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 5px 15px rgba(102, 126, 234, 0.3);
+}
+
+/* Mapa de Rotas */
+.mapa-rotas {
+  background: white;
+  border-radius: 15px;
+  padding: 2rem;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+  margin-bottom: 2rem;
+}
+
+.mapa-container {
+  position: relative;
+  width: 100%;
+  height: 400px;
+  background: linear-gradient(135deg, #f8f9fa, #e9ecef);
+  border: 3px solid #1e3c72;
+  border-radius: 15px;
+  overflow: hidden;
+  margin-top: 1rem;
+}
+
+.mapa-cidades {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  z-index: 1;
+}
+
+.cidade {
+  position: absolute;
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: bold;
+  color: white;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  z-index: 10;
+}
+
+.cidade:hover {
+  transform: scale(1.1);
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+}
+
+.cidade.origem {
+  background: linear-gradient(135deg, #27ae60, #229954);
+}
+
+.cidade.destino {
+  background: linear-gradient(135deg, #e74c3c, #c0392b);
+}
+
+.cidade.intermediaria {
+  background: linear-gradient(135deg, #f39c12, #e67e22);
+}
+
+.rotas-linhas {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  z-index: 2;
+}
+
+.rota-linha {
+  position: absolute;
+  height: 4px;
+  border-radius: 2px;
+  animation: rotaPulse 2s infinite;
+}
+
+.rota-linha.otimizada {
+  background: linear-gradient(90deg, #27ae60, #229954);
+  height: 6px;
+}
+
+.rota-linha.alternativa1 {
+  background: linear-gradient(90deg, #f39c12, #e67e22);
+}
+
+.rota-linha.alternativa2 {
+  background: linear-gradient(90deg, #9b59b6, #8e44ad);
+}
+
+@keyframes rotaPulse {
+  0% { opacity: 0.7; }
+  50% { opacity: 1; }
+  100% { opacity: 0.7; }
+}
+
+/* GPS Indicador */
+.gps-indicador {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  z-index: 5;
+  pointer-events: none;
+}
+
+.gps-dot {
+  position: absolute;
+  width: 20px;
+  height: 20px;
+  background: #3498db;
+  border-radius: 50%;
+  border: 3px solid white;
+  box-shadow: 0 0 10px rgba(52, 152, 219, 0.5);
+  animation: gpsPulse 1s infinite;
+  transition: all 0.5s ease;
+}
+
+@keyframes gpsPulse {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.2); }
+  100% { transform: scale(1); }
+}
+
+/* Comparação de Rotas */
+.comparacao-rotas {
+  background: white;
+  border-radius: 15px;
+  padding: 2rem;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+  margin-bottom: 2rem;
+}
+
+.rotas-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 1.5rem;
+  margin-top: 1.5rem;
+}
+
+.rota-card {
+  border: 2px solid #e0e0e0;
+  border-radius: 12px;
+  padding: 1.5rem;
+  transition: all 0.3s ease;
+  position: relative;
+}
+
+.rota-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+}
+
+.rota-card.otimizada {
+  border-color: #27ae60;
+  background: linear-gradient(135deg, #f0fff4, #e6fffa);
+}
+
+.rota-card.alternativa1 {
+  border-color: #f39c12;
+}
+
+.rota-card.alternativa2 {
+  border-color: #9b59b6;
+}
+
+.rota-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1rem;
+}
+
+.rota-titulo {
+  font-size: 1.2rem;
+  font-weight: bold;
+  color: #1e3c72;
+}
+
+.rota-status {
+  padding: 0.25rem 0.75rem;
+  border-radius: 15px;
+  font-size: 0.8rem;
+  font-weight: 600;
+}
+
+.rota-status.otimizada {
+  background: #27ae60;
+  color: white;
+}
+
+.rota-status.alternativa {
+  background: #f39c12;
+  color: white;
+}
+
+.rota-detalhes {
+  display: grid;
+  gap: 0.75rem;
+}
+
+.rota-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.5rem 0;
+  border-bottom: 1px solid #f0f0f0;
+}
+
+.rota-item:last-child {
+  border-bottom: none;
+}
+
+.rota-label {
+  color: #666;
+  font-size: 0.9rem;
+}
+
+.rota-valor {
+  font-weight: 600;
+  color: #1e3c72;
+}
+
+.rota-valor.economia {
+  color: #27ae60;
+  font-weight: bold;
+}
+
+.rota-valor.custo {
+  color: #e74c3c;
+  font-weight: bold;
+}
+
+.economia-destaque {
+  background: linear-gradient(135deg, #f0fff4, #e6fffa);
+  border-radius: 8px;
+  padding: 0.75rem;
+  margin: 0.5rem 0;
+  border-left: 4px solid #27ae60;
+}
+
+.economia-destaque .rota-valor {
+  font-size: 1.1rem;
+  font-weight: bold;
+  color: #27ae60;
+}
+
+/* Simulação GPS */
+.simulacao-gps {
+  background: white;
+  border-radius: 15px;
+  padding: 2rem;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+  margin-bottom: 2rem;
+}
+
+.gps-controls {
+  display: flex;
+  gap: 1rem;
+  margin-bottom: 2rem;
+  flex-wrap: wrap;
+}
+
+.btn-simular, .btn-pausar, .btn-resetar {
+  padding: 0.75rem 1.5rem;
+  border: none;
+  border-radius: 8px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.btn-simular {
+  background: linear-gradient(135deg, #27ae60, #229954);
+  color: white;
+}
+
+.btn-pausar {
+  background: linear-gradient(135deg, #f39c12, #e67e22);
+  color: white;
+}
+
+.btn-resetar {
+  background: linear-gradient(135deg, #e74c3c, #c0392b);
+  color: white;
+}
+
+.btn-simular:hover, .btn-pausar:hover, .btn-resetar:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+}
+
+.gps-info {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 1rem;
+  padding: 1.5rem;
+  background: #f8f9fa;
+  border-radius: 10px;
+}
+
+.info-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.5rem;
+}
+
+.info-item .label {
+  color: #666;
+  font-size: 0.9rem;
+}
+
+.info-item span:last-child {
+  font-weight: 600;
+  color: #1e3c72;
+}
+
+/* Economia Ambiental */
+.economia-ambiental {
+  background: white;
+  border-radius: 15px;
+  padding: 2rem;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+  margin-bottom: 2rem;
+}
+
+.economia-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 1.5rem;
+  margin-top: 1.5rem;
+}
+
+.economia-card {
+  background: linear-gradient(135deg, #f8f9fa, #e9ecef);
+  padding: 1.5rem;
+  border-radius: 12px;
+  text-align: center;
+  border: 1px solid #e0e0e0;
+  transition: transform 0.3s ease;
+}
+
+.economia-card:hover {
+  transform: translateY(-5px);
+}
+
+.economia-card h3 {
+  color: #1e3c72;
+  margin-bottom: 1rem;
+  font-size: 1.1rem;
+}
+
+.economia-valor {
+  font-size: 2rem;
+  font-weight: bold;
+  color: #27ae60;
+  margin-bottom: 0.5rem;
+  cursor: help;
+  position: relative;
+}
+
+.economia-valor:hover {
+  color: #229954;
+  transform: scale(1.05);
+  transition: all 0.3s ease;
+}
+
+.economia-desc {
+  color: #666;
+  font-size: 0.9rem;
+}
+
+/* Projeções Futuras */
+.projecoes-futuras {
+  background: white;
+  border-radius: 15px;
+  padding: 2rem;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+  margin-bottom: 2rem;
+}
+
+.projecoes-tabs {
+  display: flex;
+  gap: 1rem;
+  margin-bottom: 2rem;
+  flex-wrap: wrap;
+}
+
+.tab-btn {
+  padding: 0.75rem 1.5rem;
+  border: 2px solid #1e3c72;
+  background: white;
+  color: #1e3c72;
+  border-radius: 25px;
+  cursor: pointer;
+  font-weight: 600;
+  transition: all 0.3s ease;
+}
+
+.tab-btn:hover {
+  background: #1e3c72;
+  color: white;
+}
+
+.tab-btn.ativo {
+  background: #1e3c72;
+  color: white;
+}
+
+.projecoes-content {
+  background: #f8f9fa;
+  padding: 2rem;
+  border-radius: 10px;
+  min-height: 200px;
+}
+
+.projecao-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem;
+  margin-bottom: 1rem;
+  background: white;
+  border-radius: 8px;
+  border-left: 4px solid #27ae60;
+}
+
+.projecao-label {
+  font-weight: 600;
+  color: #1e3c72;
+}
+
+.projecao-valor {
+  font-size: 1.2rem;
+  font-weight: bold;
+  color: #27ae60;
+}
+
+/* Gráficos de Economia */
+.graficos-economia {
+  background: white;
+  border-radius: 15px;
+  padding: 2rem;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+}
+
+.graficos-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+  gap: 2rem;
+  margin-top: 1.5rem;
+}
+
+.grafico-container {
+  background: #f8f9fa;
+  padding: 1.5rem;
+  border-radius: 10px;
+  border: 1px solid #e0e0e0;
+}
+
+.grafico-container h3 {
+  color: #1e3c72;
+  margin-bottom: 1rem;
+  text-align: center;
+}
+
+/* Resumo da Economia */
+.resumo-economia {
+  background: linear-gradient(135deg, #f8f9fa, #e9ecef);
+  border-radius: 15px;
+  padding: 2rem;
+  margin-bottom: 2rem;
+  border: 2px solid #27ae60;
+}
+
+.resumo-header {
+  text-align: center;
+  margin-bottom: 2rem;
+}
+
+.resumo-header h3 {
+  color: #1e3c72;
+  margin-bottom: 0.5rem;
+  font-size: 1.5rem;
+}
+
+.resumo-header p {
+  color: #666;
+  font-size: 1rem;
+}
+
+.resumo-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 1.5rem;
+}
+
+.resumo-item {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 1.5rem;
+  background: white;
+  border-radius: 12px;
+  border-left: 4px solid #27ae60;
+  transition: transform 0.3s ease;
+}
+
+.resumo-item:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+}
+
+.resumo-icon {
+  font-size: 2rem;
+  width: 60px;
+  height: 60px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg, #27ae60, #229954);
+  color: white;
+  border-radius: 50%;
+}
+
+.resumo-info {
+  flex: 1;
+}
+
+.resumo-valor {
+  font-size: 1.5rem;
+  font-weight: bold;
+  color: #27ae60;
+  margin-bottom: 0.25rem;
+}
+
+.resumo-label {
+  color: #666;
+  font-size: 0.9rem;
+}
+
+/* Responsividade */
+@media (max-width: 768px) {
+  .origem-destino {
+    grid-template-columns: 1fr;
+  }
+  
+  .carga-config {
+    flex-direction: column;
+    align-items: stretch;
+  }
+  
+  .gps-controls {
+    justify-content: center;
+  }
+  
+  .gps-info {
+    grid-template-columns: 1fr;
+  }
+  
+  .economia-grid {
+    grid-template-columns: 1fr;
+  }
+  
+  .graficos-grid {
+    grid-template-columns: 1fr;
+  }
+  
+  .projecoes-tabs {
+    justify-content: center;
+  }
+}
+

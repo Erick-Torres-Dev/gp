@@ -1,0 +1,72 @@
+Aqui está o código separado em **HTML, CSS e JS** para que você possa criar suas 3 pastas:
+
+---
+
+### 📄 `index.html`
+```html
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Roteirização Sustentável</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header>
+    <h1>Roteirização Sustentável</h1>
+    <p>Monitoramento inteligente de transportes e impacto ambiental</p>
+  </header>
+
+  <main>
+    <section class="controls">
+      <h2>Configurações</h2>
+      <label>Peso da Carga (kg): <input type="number" id="pesoCarga" value="500"></label>
+      <label>Tipo de Combustível:
+        <select id="combustivel">
+          <option value="diesel">Diesel</option>
+          <option value="gnv">GNV</option>
+          <option value="eletrico">Elétrico</option>
+        </select>
+      </label>
+      <button onclick="gerarRota()">Gerar Rotas</button>
+      <button onclick="otimizarRota()">Otimizar</button>
+      <button onclick="simularSensores()">Simular Sensores</button>
+      <button onclick="resetar()">Resetar</button>
+    </section>
+
+    <section class="dashboard">
+      <h2>Indicadores</h2>
+      <div class="kpis">
+        <div class="kpi">CO₂ Estimado: <span id="co2">0</span> kg</div>
+        <div class="kpi">Quilometragem: <span id="km">0</span> km</div>
+        <div class="kpi">Viagens Ociosas: <span id="ociosas">0</span></div>
+        <div class="kpi">Eficiência: <span id="eficiencia">0%</span></div>
+      </div>
+    </section>
+
+    <section class="tabela">
+      <h2>Rotas</h2>
+      <table>
+        <thead>
+          <tr><th>ID</th><th>Origem</th><th>Destino</th><th>Status</th></tr>
+        </thead>
+        <tbody id="tabelaRotas"></tbody>
+      </table>
+    </section>
+
+    <section class="paletes">
+      <h2>Paletes com Sensores</h2>
+      <ul id="statusPaletes"></ul>
+    </section>
+
+    <section class="relatorio">
+      <h2>Relatório Ambiental</h2>
+      <p id="relatorioTexto">Nenhum relatório gerado.</p>
+    </section>
+  </main>
+
+  <script src="script.js"></script>
+</body>
+</html>
+

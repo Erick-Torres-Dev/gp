@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>IVECO GPS - Sistema de Monitoramento de Paleteiras</title>
+  <link rel="stylesheet" href="style.css">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+  <header>
+    <div class="header-content">
+      <div class="logo">
+        <h1>IVECO GPS</h1>
+        <p>Sistema de Monitoramento de Paleteiras</p>
+      </div>
+      <div class="status-bar">
+        <span class="status-item">🟢 Sistema Online</span>
+        <span class="status-item">📡 12 Paleteiras Ativas</span>
+        <span class="status-item">⏰ <span id="currentTime"></span></span>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <!-- MAPA DA EMPRESA -->
+    <section class="mapa-container">
+      <h2>Mapa da IVECO - Visão Aérea</h2>
+      <div class="mapa-empresa" id="mapaEmpresa">
+        <!-- Áreas da empresa -->
+        <div class="area area-fabrica" data-area="fabrica">
+          <span>🏭 Fábrica</span>
+        </div>
+        <div class="area area-armazem" data-area="armazem">
+          <span>📦 Armazém</span>
+        </div>
+        <div class="area area-doca" data-area="doca">
+          <span>🚛 Doca de Carregamento</span>
+        </div>
+        <div class="area area-estacionamento" data-area="estacionamento">
+          <span>🅿️ Estacionamento</span>
+        </div>
+        <div class="area area-escritorio" data-area="escritorio">
+          <span>🏢 Escritório</span>
+        </div>
+        
+        <!-- Paleteiras (serão criadas dinamicamente) -->
+        <div id="paleteiras-container"></div>
+        
+        <!-- Rotas (serão criadas dinamicamente) -->
+        <div id="rotas-container"></div>
+      </div>
+    </section>
+
+    <!-- CONTROLES -->
+    <section class="controls">
+      <h2>Controles do Sistema</h2>
+      <div class="control-panel">
+        <div class="control-group">
+          <h3>Configurações</h3>
+      <div class="inputs">
+        <label>Peso da Carga (kg): <input type="number" id="pesoCarga" value="500"></label>
+        <label>Tipo de Combustível:
+          <select id="combustivel">
+            <option value="diesel">Diesel</option>
+            <option value="gnv">GNV</option>
+            <option value="eletrico">Elétrico</option>
+          </select>
+        </label>
+            <label>Velocidade (km/h): <input type="range" id="velocidade" min="5" max="30" value="15"></label>
+          </div>
+      </div>
+        <div class="control-group">
+          <h3>Ações</h3>
+      <div class="buttons">
+            <button onclick="gerarRota()" class="btn-primary">🚀 Gerar Rotas</button>
+            <button onclick="otimizarRota()" class="btn-success">⚡ Otimizar Carregamento</button>
+            <button onclick="sugerirOtimizacoes()" class="btn-info">💡 Sugerir Otimizações</button>
+            <button onclick="verificarConflitosRota()" class="btn-warning">⚠️ Verificar Conflitos</button>
+            <button onclick="simularSensores()" class="btn-secondary">📡 Simular Sensores</button>
+            <button onclick="resetar()" class="btn-danger">🔄 Resetar</button>
+          </div>
+          
+          <div class="navigation-buttons">
+            <a href="rotas-cidades.html" class="nav-btn">🗺️ Rotas Entre Cidades</a>
+            <a href="relatorios-ambientais.html" class="nav-btn">📊 Relatórios Ambientais</a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- DASHBOARD -->
+    <section class="dashboard">
+      <h2>Indicadores em Tempo Real</h2>
+      <div class="kpis">
+        <div class="kpi">
+          <h3>🌱 CO₂ Economizado</h3>
+          <p><span id="co2">+0</span> kg</p>
+          <div class="kpi-icon">🌱</div>
+        </div>
+        <div class="kpi">
+          <h3>Quilometragem</h3>
+          <p><span id="km">0</span> km</p>
+          <div class="kpi-icon">🛣️</div>
+        </div>
+        <div class="kpi">
+          <h3>Paleteiras Ociosas</h3>
+          <p><span id="ociosas">0</span></p>
+          <div class="kpi-icon">⚠️</div>
+        </div>
+        <div class="kpi">
+          <h3>🌍 Eficiência Ambiental</h3>
+          <p><span id="eficiencia">0%</span></p>
+          <div class="kpi-icon">🌍</div>
+        </div>
+      </div>
+      <div class="chart-container">
+      <canvas id="co2Chart" width="400" height="200"></canvas>
+      </div>
+    </section>
+
+    <!-- PALETEIRAS ATIVAS -->
+    <section class="paleteiras-ativas">
+      <h2>Paleteiras em Movimento</h2>
+      <div id="statusPaletes" class="paleteiras-grid"></div>
+    </section>
+
+    <!-- ROTAS ATIVAS -->
+    <section class="rotas-ativas">
+      <h2>Rotas Ativas</h2>
+      <div class="table-container">
+      <table>
+        <thead>
+            <tr><th>ID</th><th>Paleteira</th><th>Origem</th><th>Destino</th><th>Carga</th><th>Peso/Altura</th><th>Status</th><th>Progresso</th></tr>
+        </thead>
+        <tbody id="tabelaRotas"></tbody>
+      </table>
+      </div>
+    </section>
+
+    <!-- HISTÓRICO DE ROTAS -->
+    <section class="historico-rotas">
+      <h2>📊 Histórico de Rotas</h2>
+      <div class="historico-controls">
+        <button onclick="mostrarHistorico('dia')" class="btn-historico">📅 Hoje</button>
+        <button onclick="mostrarHistorico('semana')" class="btn-historico">📆 Esta Semana</button>
+        <button onclick="mostrarHistorico('mes')" class="btn-historico">📅 Este Mês</button>
+        <button onclick="mostrarHistorico('todos')" class="btn-historico">📋 Todos</button>
+      </div>
+      <div class="historico-stats">
+        <div class="stat-historico">
+          <span class="stat-number" id="totalRotas">0</span>
+          <span class="stat-label">Total de Rotas</span>
+        </div>
+        <div class="stat-historico">
+          <span class="stat-number" id="totalPeso">0</span>
+          <span class="stat-label">kg Transportados</span>
+        </div>
+        <div class="stat-historico">
+          <span class="stat-number" id="eficienciaMedia">0%</span>
+          <span class="stat-label">Eficiência Média</span>
+        </div>
+      </div>
+      <div id="historicoLista" class="historico-lista"></div>
+    </section>
+
+    <!-- RELATÓRIO -->
+    <section class="relatorio">
+      <h2>Relatório de Operações</h2>
+      <div id="relatorioTexto" class="relatorio-cards"></div>
+    </section>
+  </main>
+
+  <script src="script.js"></script>
+  <script src="funcionalidades-avancadas.js"></script>
+</body>
+</html>

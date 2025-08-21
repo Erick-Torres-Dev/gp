@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>IVECO GPS - Relatórios Ambientais</title>
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="relatorios-ambientais.css">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+  <header>
+    <div class="header-content">
+      <div class="logo">
+        <h1>IVECO GPS - Relatórios Ambientais</h1>
+        <p>Sistema de Monitoramento de Sustentabilidade e Economia</p>
+      </div>
+      <div class="status-bar">
+        <span class="status-item">🟢 Sistema Online</span>
+        <span class="status-item">📊 Relatórios Ativos</span>
+        <span class="status-item">⏰ <span id="currentTime"></span></span>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <!-- RESUMO EXECUTIVO -->
+    <section class="resumo-executivo">
+      <h2>📋 Resumo Executivo</h2>
+      <div class="resumo-grid">
+        <div class="resumo-card">
+          <h3>🌱 Impacto Ambiental Total</h3>
+          <div class="resumo-valor" id="impactoTotal">0 kg CO₂</div>
+          <div class="resumo-desc">Redução acumulada</div>
+        </div>
+        <div class="resumo-card">
+          <h3>⛽ Economia de Combustível</h3>
+          <div class="resumo-valor" id="economiaCombustivel">0 L</div>
+          <div class="resumo-desc">Total economizado</div>
+        </div>
+        <div class="resumo-card">
+          <h3>💰 Economia Financeira</h3>
+          <div class="resumo-valor" id="economiaFinanceira">R$ 0,00</div>
+          <div class="resumo-desc">Valor total economizado</div>
+        </div>
+        <div class="resumo-card">
+          <h3>🌍 Árvores Equivalentes</h3>
+          <div class="resumo-valor" id="arvoresEquivalentes">0</div>
+          <div class="resumo-desc">CO₂ absorvido</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- FILTROS DE PERÍODO -->
+    <section class="filtros-periodo">
+      <h2>📅 Filtros de Período</h2>
+      <div class="filtros-controls">
+        <button onclick="filtrarRelatorio('hoje')" class="filtro-btn ativo">📅 Hoje</button>
+        <button onclick="filtrarRelatorio('semana')" class="filtro-btn">📆 Esta Semana</button>
+        <button onclick="filtrarRelatorio('mes')" class="filtro-btn">📅 Este Mês</button>
+        <button onclick="filtrarRelatorio('ano')" class="filtro-btn">📅 Este Ano</button>
+        <button onclick="filtrarRelatorio('todos')" class="filtro-btn">📋 Todos</button>
+      </div>
+    </section>
+
+    <!-- RELATÓRIO PALETEIRAS -->
+    <section class="relatorio-paleteiras">
+      <h2>🚛 Relatório de Paleteiras</h2>
+      <div class="paleteiras-stats">
+        <div class="stat-card">
+          <h4>📦 Transportes Realizados</h4>
+          <div class="stat-number" id="transportesRealizados">0</div>
+          <div class="stat-desc">Total de movimentações</div>
+        </div>
+        <div class="stat-card">
+          <h4>⚡ Otimizações Aplicadas</h4>
+          <div class="stat-number" id="otimizacoesAplicadas">0</div>
+          <div class="stat-desc">Rotas otimizadas</div>
+        </div>
+        <div class="stat-card">
+          <h4>🌿 CO₂ Economizado</h4>
+          <div class="stat-number" id="co2Paleteiras">0 kg</div>
+          <div class="stat-desc">Redução nas paleteiras</div>
+        </div>
+        <div class="stat-card">
+          <h4>⏰ Tempo Economizado</h4>
+          <div class="stat-number" id="tempoPaleteiras">0h</div>
+          <div class="stat-desc">Horas economizadas</div>
+        </div>
+      </div>
+      
+      <div class="paleteiras-detalhes">
+        <h3>📊 Detalhamento por Paleteira</h3>
+        <div class="tabela-paleteiras">
+          <table>
+            <thead>
+              <tr>
+                <th>Paleteira</th>
+                <th>Transportes</th>
+                <th>Peso Total</th>
+                <th>CO₂ Economizado</th>
+                <th>Eficiência</th>
+              </tr>
+            </thead>
+            <tbody id="tabelaPaleteiras">
+              <!-- Dados serão preenchidos dinamicamente -->
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <!-- RELATÓRIO ROTAS CIDADES -->
+    <section class="relatorio-rotas">
+      <h2>🗺️ Relatório de Rotas Entre Cidades</h2>
+      <div class="rotas-stats">
+        <div class="stat-card">
+          <h4>🛣️ Viagens Realizadas</h4>
+          <div class="stat-number" id="viagensRealizadas">0</div>
+          <div class="stat-desc">Total de viagens</div>
+        </div>
+        <div class="stat-card">
+          <h4>⚡ Rotas Otimizadas</h4>
+          <div class="stat-number" id="rotasOtimizadas">0</div>
+          <div class="stat-desc">Rotas mais eficientes</div>
+        </div>
+        <div class="stat-card">
+          <h4>🌿 CO₂ Economizado</h4>
+          <div class="stat-number" id="co2Rotas">0 kg</div>
+          <div class="stat-desc">Redução nas viagens</div>
+        </div>
+        <div class="stat-card">
+          <h4>⛽ Combustível Economizado</h4>
+          <div class="stat-number" id="combustivelRotas">0 L</div>
+          <div class="stat-desc">Litros economizados</div>
+        </div>
+      </div>
+      
+      <div class="rotas-detalhes">
+        <h3>📊 Detalhamento por Rota</h3>
+        <div class="tabela-rotas">
+          <table>
+            <thead>
+              <tr>
+                <th>Origem → Destino</th>
+                <th>Distância</th>
+                <th>Combustível</th>
+                <th>CO₂</th>
+                <th>Economia</th>
+              </tr>
+            </thead>
+            <tbody id="tabelaRotas">
+              <!-- Dados serão preenchidos dinamicamente -->
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <!-- COMPARAÇÃO AMBIENTAL -->
+    <section class="comparacao-ambiental">
+      <h2>🌍 Comparação Ambiental</h2>
+      <div class="comparacao-grid">
+        <div class="comparacao-card">
+          <h3>🚛 Paleteiras vs 🚛 Caminhões</h3>
+          <div class="comparacao-chart">
+            <canvas id="graficoComparacao"></canvas>
+          </div>
+        </div>
+        <div class="comparacao-card">
+          <h3>📈 Evolução da Economia</h3>
+          <div class="comparacao-chart">
+            <canvas id="graficoEvolucao"></canvas>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- PROJEÇÕES FUTURAS -->
+    <section class="projecoes-futuras">
+      <h2>🔮 Projeções Futuras</h2>
+      <div class="projecoes-tabs">
+        <button class="projecao-btn ativo" onclick="mostrarProjecaoAmbiental('10anos')">10 Anos</button>
+        <button class="projecao-btn" onclick="mostrarProjecaoAmbiental('50anos')">50 Anos</button>
+        <button class="projecao-btn" onclick="mostrarProjecaoAmbiental('100anos')">100 Anos</button>
+      </div>
+      <div class="projecoes-content" id="projecoesContent">
+        <!-- Conteúdo será preenchido dinamicamente -->
+      </div>
+    </section>
+
+    <!-- IMPACTO AMBIENTAL -->
+    <section class="impacto-ambiental">
+      <h2>🌱 Impacto Ambiental Detalhado</h2>
+      <div class="impacto-grid">
+        <div class="impacto-card">
+          <h3>🌿 Redução de CO₂</h3>
+          <div class="impacto-valor" id="reducaoCO2Total">0 kg</div>
+          <div class="impacto-desc">Equivale a plantar <span id="arvoresPlantadas">0</span> árvores</div>
+          <div class="impacto-progresso">
+            <div class="progresso-bar">
+              <div class="progresso-fill" id="progressoCO2" style="width: 0%"></div>
+            </div>
+            <span class="progresso-texto">Meta: 1000 kg CO₂</span>
+          </div>
+        </div>
+        <div class="impacto-card">
+          <h3>⛽ Economia de Combustível</h3>
+          <div class="impacto-valor" id="economiaCombustivelTotal">0 L</div>
+          <div class="impacto-desc">Equivale a <span id="economiaDinheiro">R$ 0,00</span> economizados</div>
+          <div class="impacto-progresso">
+            <div class="progresso-bar">
+              <div class="progresso-fill" id="progressoCombustivel" style="width: 0%"></div>
+            </div>
+            <span class="progresso-texto">Meta: 1000 L</span>
+          </div>
+        </div>
+        <div class="impacto-card">
+          <h3>⏰ Tempo Economizado</h3>
+          <div class="impacto-valor" id="tempoEconomizadoTotal">0h</div>
+          <div class="impacto-desc">Equivale a <span id="diasEconomizados">0</span> dias de trabalho</div>
+          <div class="impacto-progresso">
+            <div class="progresso-bar">
+              <div class="progresso-fill" id="progressoTempo" style="width: 0%"></div>
+            </div>
+            <span class="progresso-texto">Meta: 100 horas</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- CERTIFICADOS AMBIENTAIS -->
+    <section class="certificados-ambientais">
+      <h2>🏆 Certificados Ambientais</h2>
+      <div class="certificados-grid">
+        <div class="certificado-card">
+          <div class="certificado-icon">🌿</div>
+          <h3>Certificado Verde</h3>
+          <p>Redução significativa de CO₂</p>
+          <div class="certificado-status" id="statusVerde">Pendente</div>
+        </div>
+        <div class="certificado-card">
+          <div class="certificado-icon">⚡</div>
+          <h3>Certificado de Eficiência</h3>
+          <p>Otimização de rotas e recursos</p>
+          <div class="certificado-status" id="statusEficiencia">Pendente</div>
+        </div>
+        <div class="certificado-card">
+          <div class="certificado-icon">💰</div>
+          <h3>Certificado de Economia</h3>
+          <p>Redução significativa de custos</p>
+          <div class="certificado-status" id="statusEconomia">Pendente</div>
+        </div>
+        <div class="certificado-card">
+          <div class="certificado-icon">🌍</div>
+          <h3>Certificado Sustentável</h3>
+          <p>Impacto ambiental positivo</p>
+          <div class="certificado-status" id="statusSustentavel">Pendente</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- RECOMENDAÇÕES -->
+    <section class="recomendacoes">
+      <h2>💡 Recomendações para Melhorias</h2>
+      <div class="recomendacoes-grid" id="recomendacoesGrid">
+        <!-- Recomendações serão geradas dinamicamente -->
+      </div>
+    </section>
+  </main>
+
+  <script src="relatorios-ambientais.js"></script>
+</body>
+</html>
+
+
+
